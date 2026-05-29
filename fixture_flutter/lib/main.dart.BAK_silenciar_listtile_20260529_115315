@@ -1,0 +1,198 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'core/theme/bento_theme.dart';
+import 'data/datasources/local_data_source.dart';
+import 'data/repositories/fixture_repository_impl.dart';
+import 'domain/repositories/fixture_repository.dart';
+import 'presentation/providers/fixture_provider.dart';
+import 'presentation/home/home_screen.dart';
+import 'presentation/fixture/fixture_screen.dart';
+import 'presentation/groups/groups_screen.dart';
+import 'presentation/teams/teams_screen.dart';
+import 'presentation/stadiums/stadiums_screen.dart';
+import 'presentation/favorites/favorites_screen.dart';
+import 'presentation/settings/settings_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Data Source & Hive Box Storage
+  final localDataSource = LocalDataSourceImpl();
+  await localDataSource.init();
+
+  final repository = FixtureRepositoryImpl(localDataSource: localDataSource);
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<FixtureProvider>(
+          create: (_) => FixtureProvider(repository: repository)..loadData(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mundial 2026',
+      debugShowCheckedModeBanner: false,
+      theme: BentoTheme.lightTheme,
+      darkTheme: BentoTheme.darkTheme,
+      themeMode: ThemeMode.system, // Enforce dark/light mode following OS settings
+      home: const MainNavigationFrame(),
+    );
+  }
+}
+
+class MainNavigationFrame extends StatefulWidget {
+  const MainNavigationFrame({Key? key}) : super(key: key);
+
+  @override
+  _MainNavigationFrameState createState() => _MainNavigationFrameState();
+}
+
+class _MainNavigationFrameState extends State<MainNavigationFrame> {
+  int _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<FixtureProvider>(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? BentoColors.bentoBorderDark : BentoColors.bentoBorderLight;
+
+    // Screens list
+    final List<Widget> screens = [
+      HomeScreen(onNavigate: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      }),
+      const FixtureScreen(),
+      const GroupsScreen(),
+      const TeamsScreen(),
+      const StadiumsScreen(),
+      const FavoritesScreen(),
+      const SettingsScreen(),
+    ];
+
+    // Navigation Labels
+    final List<String> titles = [
+      'Inicio',
+      'Fixture',
+      'Grupos',
+      'Selecciones',
+      'Estadios',
+      'Favoritos',
+      'Configuración',
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Text(
+              'Mundial 2026',
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 22,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: BentoColors.soccerGreen,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                'FASE DE GRUPOS',
+                style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          if (_currentIndex == 1) // Only show in FixtureScreen
+            IconButton(
+              icon: const Icon(Icons.clear_all),
+              tooltip: 'Limpiar Filtros',
+              onPressed: () => provider.clearAllFilters(),
+            ),
+        ],
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      body: provider.isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : IndexedStack(
+              index: _currentIndex,
+              children: screens,
+            ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: borderColor, width: 1),
+          ),
+        ),
+        child: NavigationBar(
+          selectedIndex: _currentIndex,
+          onDestinationSelected: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
+              label: 'Inicio',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.calendar_month_outlined),
+              selectedIcon: Icon(Icons.calendar_month),
+              label: 'Fixture',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.format_list_bulleted),
+              selectedIcon: Icon(Icons.format_list_bulleted_rounded),
+              label: 'Grupos',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.flag_outlined),
+              selectedIcon: Icon(Icons.flag),
+              label: 'Países',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.place_outlined),
+              selectedIcon: Icon(Icons.place),
+              label: 'Estadios',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.star_border),
+              selectedIcon: Icon(Icons.star),
+              label: 'Favoritos',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings),
+              label: 'Ajustes',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
