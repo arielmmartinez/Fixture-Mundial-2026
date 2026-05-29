@@ -1,4 +1,4 @@
-import 'package:flutter/material';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../domain/entities/fixture_entities.dart';
 import '../../core/theme/bento_theme.dart';
@@ -65,7 +65,7 @@ class MatchCard extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 8,
-                          fontWeight: FontWeight.black,
+                          fontWeight: FontWeight.w900,
                           color: Color(0xFF047857),
                           letterSpacing: 0.5,
                         ),
@@ -76,7 +76,7 @@ class MatchCard extends StatelessWidget {
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 9,
-                        fontWeight: FontWeight.black,
+                        fontWeight: FontWeight.w900,
                         color: BentoColors.bentoSlate500,
                         letterSpacing: 0.5,
                       ),
@@ -98,7 +98,7 @@ class MatchCard extends StatelessWidget {
                             style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 15,
-                              fontWeight: FontWeight.black,
+                              fontWeight: FontWeight.w900,
                               color: BentoColors.deepSlate, // High contrast text
                             ),
                           ),
@@ -119,7 +119,7 @@ class MatchCard extends StatelessWidget {
                                   style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 15,
-                                    fontWeight: FontWeight.black,
+                                    fontWeight: FontWeight.w900,
                                     color: BentoColors.deepSlate,
                                   ),
                                 ),
@@ -130,7 +130,7 @@ class MatchCard extends StatelessWidget {
                                     fontFamily: 'Inter',
                                     fontSize: 8,
                                     color: BentoColors.bentoSlate500,
-                                    fontWeight: FontWeight.black,
+                                    fontWeight: FontWeight.w900,
                                   ),
                                 ),
                               ],
@@ -142,7 +142,7 @@ class MatchCard extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 20,
-                                    fontWeight: FontWeight.black,
+                                    fontWeight: FontWeight.w900,
                                     color: match.status == 'en vivo'
                                         ? Colors.red
                                         : BentoColors.deepSlate,
@@ -162,7 +162,7 @@ class MatchCard extends StatelessWidget {
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: 7,
-                                      fontWeight: FontWeight.black,
+                                      fontWeight: FontWeight.w900,
                                       color: match.status == 'en vivo' ? Colors.red : BentoColors.bentoSlate500,
                                     ),
                                   ),
@@ -183,7 +183,7 @@ class MatchCard extends StatelessWidget {
                             style: const TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 15,
-                              fontWeight: FontWeight.black,
+                              fontWeight: FontWeight.w900,
                               color: BentoColors.deepSlate,
                             ),
                           ),
@@ -324,7 +324,7 @@ class MatchCardInline extends StatelessWidget {
                     match.homeTeam,
                     style: const TextStyle(
                       fontFamily: 'Inter',
-                      fontWeight: FontWeight.black,
+                      fontWeight: FontWeight.w900,
                       fontSize: 13,
                       color: BentoColors.deepSlate,
                     ),
@@ -342,7 +342,7 @@ class MatchCardInline extends StatelessWidget {
                       match.localTime,
                       style: const TextStyle(
                         fontFamily: 'Inter',
-                        fontWeight: FontWeight.black,
+                        fontWeight: FontWeight.w900,
                         fontSize: 13,
                         color: BentoColors.deepSlate,
                       ),
@@ -351,7 +351,7 @@ class MatchCardInline extends StatelessWidget {
                       '${match.homeScore} - ${match.awayScore}',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontWeight: FontWeight.black,
+                        fontWeight: FontWeight.w900,
                         fontSize: 14,
                         color: match.status == 'en vivo' ? Colors.red : BentoColors.deepSlate,
                       ),
@@ -367,7 +367,7 @@ class MatchCardInline extends StatelessWidget {
                     match.awayTeam,
                     style: const TextStyle(
                       fontFamily: 'Inter',
-                      fontWeight: FontWeight.black,
+                      fontWeight: FontWeight.w900,
                       fontSize: 13,
                       color: BentoColors.deepSlate,
                     ),
@@ -386,7 +386,7 @@ class MatchCardInline extends StatelessWidget {
                 fontFamily: 'Inter',
                 fontSize: 8,
                 color: BentoColors.bentoSlate500,
-                fontWeight: FontWeight.black,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ],

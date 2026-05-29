@@ -1,4 +1,4 @@
-import 'package:flutter/material';
+import 'package:flutter/material.dart';
 import '../../core/theme/bento_theme.dart';
 
 class PremiumHeader extends StatelessWidget {
@@ -49,7 +49,7 @@ class PremiumHeader extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 34,
-                fontWeight: FontWeight.black,
+                fontWeight: FontWeight.w900,
                 fontStyle: FontStyle.italic,
                 color: Colors.white,
                 letterSpacing: -1,
@@ -97,7 +97,7 @@ class PremiumHeader extends StatelessWidget {
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 9,
-                  fontWeight: FontWeight.black,
+                  fontWeight: FontWeight.w900,
                   color: Colors.white,
                   letterSpacing: 1.2,
                 ),

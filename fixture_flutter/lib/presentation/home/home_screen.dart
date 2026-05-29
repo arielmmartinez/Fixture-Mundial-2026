@@ -1,4 +1,4 @@
-import 'package:flutter/material';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/bento_theme.dart';
 import '../../domain/entities/fixture_entities.dart' as fixture_entities;
@@ -117,7 +117,7 @@ class HomeScreen extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 9,
-                                    fontWeight: FontWeight.black,
+                                    fontWeight: FontWeight.w900,
                                     color: BentoColors.worldCupGold,
                                     letterSpacing: 1.5,
                                   ),
@@ -130,7 +130,7 @@ class HomeScreen extends StatelessWidget {
                               style: const TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 40,
-                                fontWeight: FontWeight.black,
+                                fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
                                 color: Colors.white,
                                 letterSpacing: -1,
@@ -213,7 +213,7 @@ class HomeScreen extends StatelessWidget {
                                         style: TextStyle(
                                           fontFamily: 'Inter',
                                           fontSize: 8,
-                                          fontWeight: FontWeight.black,
+                                          fontWeight: FontWeight.w900,
                                           color: BentoColors.bentoSlate500,
                                           letterSpacing: 0.5,
                                         ),
@@ -233,7 +233,7 @@ class HomeScreen extends StatelessWidget {
                                               style: const TextStyle(
                                                 fontFamily: 'Inter',
                                                 fontSize: 10,
-                                                fontWeight: FontWeight.black,
+                                                fontWeight: FontWeight.w900,
                                                 color: BentoColors.deepSlate,
                                               ),
                                             ),
@@ -244,7 +244,7 @@ class HomeScreen extends StatelessWidget {
                                           style: TextStyle(
                                             fontFamily: 'Inter',
                                             fontSize: 12,
-                                            fontWeight: FontWeight.black,
+                                            fontWeight: FontWeight.w900,
                                             fontStyle: FontStyle.italic,
                                             color: BentoColors.worldCupGold,
                                           ),
@@ -258,7 +258,7 @@ class HomeScreen extends StatelessWidget {
                                               style: const TextStyle(
                                                 fontFamily: 'Inter',
                                                 fontSize: 10,
-                                                fontWeight: FontWeight.black,
+                                                fontWeight: FontWeight.w900,
                                                 color: BentoColors.deepSlate,
                                               ),
                                             ),
@@ -327,7 +327,7 @@ class HomeScreen extends StatelessWidget {
                                         style: TextStyle(
                                           fontFamily: 'Inter',
                                           fontSize: 8,
-                                          fontWeight: FontWeight.black,
+                                          fontWeight: FontWeight.w900,
                                           color: Colors.white.withOpacity(0.85),
                                           letterSpacing: 0.5,
                                         ),
@@ -342,7 +342,7 @@ class HomeScreen extends StatelessWidget {
                                         style: TextStyle(
                                           fontFamily: 'Inter',
                                           fontSize: 20,
-                                          fontWeight: FontWeight.black,
+                                          fontWeight: FontWeight.w900,
                                           color: Colors.white,
                                         ),
                                       ),
@@ -389,7 +389,7 @@ class HomeScreen extends StatelessWidget {
                           icon: const Icon(Icons.calendar_today, size: 14, color: BentoColors.worldCupGold),
                           label: const Text(
                             'Fixture completo',
-                            style: TextStyle(fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.black),
+                            style: TextStyle(fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w900),
                           ),
                           onPressed: () => onNavigate(1),
                         ),
@@ -413,7 +413,7 @@ class HomeScreen extends StatelessWidget {
                           icon: const Icon(Icons.star, color: BentoColors.worldCupGold, size: 14),
                           label: const Text(
                             'Favoritos',
-                            style: TextStyle(fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.black),
+                            style: TextStyle(fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w900),
                           ),
                           onPressed: () => onNavigate(5),
                         ),
@@ -432,7 +432,7 @@ class HomeScreen extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 16,
-                        fontWeight: FontWeight.black,
+                        fontWeight: FontWeight.w900,
                         color: Colors.white,
                       ),
                     ),
@@ -445,7 +445,7 @@ class HomeScreen extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontSize: 11,
-                              fontWeight: FontWeight.black,
+                              fontWeight: FontWeight.w900,
                               color: BentoColors.electricGreen,
                             ),
                           ),
@@ -487,7 +487,7 @@ class HomeScreen extends StatelessWidget {
                             'Modo Offline Activo',
                             style: TextStyle(
                               fontFamily: 'Inter',
-                              fontWeight: FontWeight.black,
+                              fontWeight: FontWeight.w900,
                               fontSize: 12,
                               color: Colors.white,
                             ),

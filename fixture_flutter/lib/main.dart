@@ -159,10 +159,11 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
           color: Colors.transparent,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: isSelected ? BentoColors.soccerGreen.withOpacity(0.12) : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
@@ -183,18 +184,18 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
                 child: Icon(
                   isSelected ? selectedIcon : unselectedIcon,
                   color: isSelected ? BentoColors.soccerGreen : BentoColors.bentoSlate500,
-                  size: 22,
+                  size: 17,
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 1),
               Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontFamily: 'Inter',
-                  fontSize: 9,
-                  fontWeight: isSelected ? FontWeight.black : FontWeight.bold,
+                  fontSize: 7.5,
+                  fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
                   color: isSelected ? BentoColors.soccerGreen : BentoColors.bentoSlate500,
                 ),
               ),
@@ -205,4 +206,3 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
     );
   }
   }
-}
