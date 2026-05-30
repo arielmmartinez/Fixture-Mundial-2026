@@ -81,7 +81,11 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
           _currentIndex = index;
         });
       }),
-      const FixtureScreen(),
+      FixtureScreen(onNavigate: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      }),
       const GroupsScreen(),
       const TeamsScreen(),
       const StadiumsScreen(),
@@ -110,8 +114,8 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
               index: _currentIndex,
               children: screens,
             ),
-      bottomNavigationBar: _currentIndex == 0
-          ? null // Hide dynamic nav bar on HomeScreen to show the mockup's pixel-perfect baked nav bar
+      bottomNavigationBar: (_currentIndex == 0 || _currentIndex == 1)
+          ? null // Hide dynamic nav bar on Home and Fixture to display their pixel-perfect baked nav bars
           : Container(
               height: 88,
         decoration: BoxDecoration(
