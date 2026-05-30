@@ -172,6 +172,11 @@ class _TeamsScreenState extends State<TeamsScreen> {
                         onTap: () {
                           provider.toggleTeamFollowing(filteredTeams[i].id);
                         },
+                        child: Center(
+                          child: filteredTeams[i].isFollowing
+                              ? Icon(Icons.favorite, color: Colors.red, size: 20 * scale)
+                              : const SizedBox.shrink(),
+                        ),
                       ),
                     ),
                   ],

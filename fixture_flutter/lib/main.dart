@@ -66,7 +66,7 @@ class MainNavigationFrame extends StatefulWidget {
 }
 
 class _MainNavigationFrameState extends State<MainNavigationFrame> {
-  int _currentIndex = 0;
+  int _currentIndex = 6;
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +101,16 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
           _currentIndex = index;
         });
       }),
-      const FavoritesScreen(),
-      const SettingsScreen(),
+      FavoritesScreen(onNavigate: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      }),
+      SettingsScreen(onNavigate: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      }),
     ];
 
     // Navigation Labels
@@ -126,8 +134,13 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
               index: _currentIndex,
               children: screens,
             ),
-      bottomNavigationBar: (_currentIndex == 0 || _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3 || _currentIndex == 4)
-          ? null // Hide dynamic nav bar on Home, Fixture, Groups, Teams, and Stadiums to display their pixel-perfect baked nav bars
+      bottomNavigationBar: (_currentIndex == 0 ||
+              _currentIndex == 1 ||
+              _currentIndex == 2 ||
+              _currentIndex == 3 ||
+              _currentIndex == 4 ||
+              _currentIndex == 5)
+          ? null
           : Container(
               height: 88,
         decoration: BoxDecoration(
@@ -155,7 +168,7 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
               _buildNavItem(3, Icons.flag_outlined, Icons.flag, 'Países'),
               _buildNavItem(4, Icons.place_outlined, Icons.place, 'Estadios'),
               _buildNavItem(5, Icons.star_border, Icons.star, 'Favoritos'),
-              _buildNavItem(6, Icons.settings_outlined, Icons.settings, 'Ajustes'),
+              _buildNavItem(6, Icons.settings_outlined, Icons.settings_rounded, 'Configuración'),
             ],
           ),
         ),

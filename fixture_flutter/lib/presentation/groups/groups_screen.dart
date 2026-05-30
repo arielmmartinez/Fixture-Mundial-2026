@@ -203,6 +203,11 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () => provider.toggleFavorite(match1.id),
+                      child: Center(
+                        child: match1.isFavorite
+                            ? Icon(Icons.star, color: const Color(0xFFFFD700), size: 22 * scale)
+                            : const SizedBox.shrink(),
+                      ),
                     ),
                   ),
                 ],
@@ -228,6 +233,11 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () => provider.toggleFavorite(match2.id),
+                      child: Center(
+                        child: match2.isFavorite
+                            ? Icon(Icons.star, color: const Color(0xFFFFD700), size: 22 * scale)
+                            : const SizedBox.shrink(),
+                      ),
                     ),
                   ),
                 ],

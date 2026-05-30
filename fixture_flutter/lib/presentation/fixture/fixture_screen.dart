@@ -232,6 +232,11 @@ class _FixtureScreenState extends State<FixtureScreen> {
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () => provider.toggleFavorite(match1.id),
+                    child: Center(
+                      child: match1.isFavorite
+                          ? Icon(Icons.star, color: const Color(0xFFFFD700), size: 20 * scale)
+                          : const SizedBox.shrink(),
+                    ),
                   ),
                 ),
 
@@ -255,6 +260,11 @@ class _FixtureScreenState extends State<FixtureScreen> {
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () => provider.toggleReminder(match2.id),
+                    child: Center(
+                      child: match2.reminderEnabled
+                          ? Icon(Icons.notifications_active, color: const Color(0xFF00E5FF), size: 22 * scale)
+                          : const SizedBox.shrink(),
+                    ),
                   ),
                 ),
                 // Match 2: Favorite Toggle Hotspot
@@ -266,6 +276,11 @@ class _FixtureScreenState extends State<FixtureScreen> {
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () => provider.toggleFavorite(match2.id),
+                    child: Center(
+                      child: match2.isFavorite
+                          ? Icon(Icons.star, color: const Color(0xFFFFD700), size: 22 * scale)
+                          : const SizedBox.shrink(),
+                    ),
                   ),
                 ),
 
@@ -289,6 +304,11 @@ class _FixtureScreenState extends State<FixtureScreen> {
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () => provider.toggleReminder(match3.id),
+                    child: Center(
+                      child: match3.reminderEnabled
+                          ? Icon(Icons.notifications_active, color: const Color(0xFF00E5FF), size: 22 * scale)
+                          : const SizedBox.shrink(),
+                    ),
                   ),
                 ),
                 // Match 3: Favorite Toggle Hotspot
@@ -300,6 +320,11 @@ class _FixtureScreenState extends State<FixtureScreen> {
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () => provider.toggleFavorite(match3.id),
+                    child: Center(
+                      child: match3.isFavorite
+                          ? Icon(Icons.star, color: const Color(0xFFFFD700), size: 22 * scale)
+                          : const SizedBox.shrink(),
+                    ),
                   ),
                 ),
 
