@@ -96,7 +96,11 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
           _currentIndex = index;
         });
       }),
-      const StadiumsScreen(),
+      StadiumsScreen(onNavigate: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      }),
       const FavoritesScreen(),
       const SettingsScreen(),
     ];
@@ -122,8 +126,8 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
               index: _currentIndex,
               children: screens,
             ),
-      bottomNavigationBar: (_currentIndex == 0 || _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3)
-          ? null // Hide dynamic nav bar on Home, Fixture, Groups, and Teams to display their pixel-perfect baked nav bars
+      bottomNavigationBar: (_currentIndex == 0 || _currentIndex == 1 || _currentIndex == 2 || _currentIndex == 3 || _currentIndex == 4)
+          ? null // Hide dynamic nav bar on Home, Fixture, Groups, Teams, and Stadiums to display their pixel-perfect baked nav bars
           : Container(
               height: 88,
         decoration: BoxDecoration(
