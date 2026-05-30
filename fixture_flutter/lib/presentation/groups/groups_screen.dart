@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/bento_theme.dart';
 import '../providers/fixture_provider.dart';
-import '../widgets/match_card.dart';
 import '../widgets/match_detail_dialog.dart';
 import '../../domain/entities/fixture_entities.dart';
 
 class GroupsScreen extends StatefulWidget {
-  const GroupsScreen({Key? key}) : super(key: key);
+  final Function(int) onNavigate;
+
+  const GroupsScreen({
+    Key? key,
+    required this.onNavigate,
+  }) : super(key: key);
 
   @override
   _GroupsScreenState createState() => _GroupsScreenState();
@@ -31,167 +35,293 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FixtureProvider>(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final primaryColor = Theme.of(context).primaryColor;
-    final borderColor = isDark ? BentoColors.bentoBorderDark : BentoColors.bentoBorderLight;
+    
+    // Resolve matches dynamically based on current selected group tab (A to L)
+    final String groupChar = String.fromCharCode(65 + _tabController.index);
+    final groupMatches = provider.allMatches.where((m) => m.group == groupChar).toList();
+    
+    final Match? match1 = groupMatches.isNotEmpty ? groupMatches[0] : null;
+    final Match? match2 = groupMatches.length > 1 ? groupMatches[1] : null;
 
-    final standings = provider.groupStandings;
-    final groupsList = List.generate(12, (index) => String.fromCharCode(65 + index));
+    return Scaffold(
+      extendBody: true,
+      backgroundColor: BentoColors.pitchDark, // Dark background to fill any outer spaces
+      body: SafeArea(
+        top: true,
+        bottom: true,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final double parentWidth = constraints.maxWidth;
+            final double parentHeight = constraints.maxHeight;
 
-    return Column(
-      children: [
-        // Tab bar for Groups A to L
-        Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          child: TabBar(
-            controller: _tabController,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            indicatorColor: primaryColor,
-            labelColor: primaryColor,
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-            unselectedLabelColor: BentoColors.bentoSlate500,
-            unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
-            tabs: groupsList.map((g) => Tab(text: 'Grupo $g')).toList(),
-          ),
-        ),
+            // Mockup resolution: 576 x 1024
+            const double mockupWidth = 576.0;
+            const double mockupHeight = 1024.0;
+            const double imageAspectRatio = mockupWidth / mockupHeight;
 
-        // Standings and group matches view
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: groupsList.map((groupChar) {
-              final groupRows = standings[groupChar] ?? [];
-              final groupMatches = provider.allMatches.where((m) => m.group == groupChar).toList();
+            // Calculate actual fitted dimensions of Image.asset using BoxFit.contain
+            double displayedWidth;
+            double displayedHeight;
 
-              return ListView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(16),
-                children: [
-                  // Standings Table Card
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: borderColor),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Table(
-                        columnWidths: const {
-                          0: FlexColumnWidth(3.0), // Team name
-                          1: FlexColumnWidth(0.8), // PJ
-                          2: FlexColumnWidth(0.8), // PG
-                          3: FlexColumnWidth(0.8), // PE
-                          4: FlexColumnWidth(0.8), // PP
-                          5: FlexColumnWidth(1.2), // DG
-                          6: FlexColumnWidth(1.2), // PTS
-                        },
-                        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                        children: [
-                          // Table Header
-                          TableRow(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
-                            ),
-                            children: const [
-                              _TableCellHeader(text: 'SELECCIÓN', alignLeft: true),
-                              _TableCellHeader(text: 'PJ'),
-                              _TableCellHeader(text: 'G'),
-                              _TableCellHeader(text: 'E'),
-                              _TableCellHeader(text: 'P'),
-                              _TableCellHeader(text: 'DG'),
-                              _TableCellHeader(text: 'PTS'),
-                            ],
-                          ),
+            if (parentWidth / parentHeight > imageAspectRatio) {
+              displayedHeight = parentHeight;
+              displayedWidth = parentHeight * imageAspectRatio;
+            } else {
+              displayedWidth = parentWidth;
+              displayedHeight = parentWidth / imageAspectRatio;
+            }
 
-                          // Table Rows (Teams)
-                          ...groupRows.map((row) {
-                            return TableRow(
-                              decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: borderColor, width: 0.5)),
-                              ),
-                              children: [
-                                // Flag & Name
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                                  child: Row(
-                                    children: [
-                                      Text(row.teamFlag, style: const TextStyle(fontSize: 16)),
-                                      const SizedBox(width: 6),
-                                      Expanded(
-                                        child: Text(
-                                          row.teamName,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                _TableCellBody(text: '${row.played}'),
-                                _TableCellBody(text: '${row.won}'),
-                                _TableCellBody(text: '${row.drawn}'),
-                                _TableCellBody(text: '${row.lost}'),
-                                _TableCellBody(
-                                  text: (row.goalDifference > 0 ? '+' : '') + '${row.goalDifference}',
-                                  textColor: row.goalDifference > 0
-                                      ? Colors.green
-                                      : row.goalDifference < 0
-                                          ? Colors.red
-                                          : null,
-                                ),
-                                _TableCellBody(
-                                  text: '${row.points}',
-                                  isBold: true,
-                                  textColor: primaryColor,
-                                ),
-                              ],
-                            );
-                          }).toList(),
-                        ],
-                      ),
+            // Centering offset (Alignment.topCenter means left offsets are centered, top is 0)
+            final double leftOffset = (parentWidth - displayedWidth) / 2.0;
+            const double topOffset = 0.0;
+
+            // Scale factor based on the actual displayed width
+            final double scale = displayedWidth / mockupWidth;
+
+            return Stack(
+              clipBehavior: Clip.none,
+              children: [
+                // 1. Pixel-perfect Mockup Background Image (Entire image fitted, no zoom, no crop)
+                Positioned(
+                  left: leftOffset,
+                  top: topOffset,
+                  width: displayedWidth,
+                  height: displayedHeight,
+                  child: Image.asset(
+                    'assets/images/grupos_mockup.png',
+                    fit: BoxFit.contain,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+
+                // 2. Transparent Interactive Hotspots (aligned dynamically based on absolute scale and offsets)
+                
+                // A. Group Selector Tabs (A to F horizontal hotspots based on x slices)
+                // Tab A (index 0)
+                Positioned(
+                  left: leftOffset + (0 * scale),
+                  top: topOffset + (110 * scale),
+                  width: 96 * scale,
+                  height: 40 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _tabController.animateTo(0);
+                      setState(() {});
+                    },
+                  ),
+                ),
+                // Tab B (index 1)
+                Positioned(
+                  left: leftOffset + (96 * scale),
+                  top: topOffset + (110 * scale),
+                  width: 96 * scale,
+                  height: 40 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _tabController.animateTo(1);
+                      setState(() {});
+                    },
+                  ),
+                ),
+                // Tab C (index 2)
+                Positioned(
+                  left: leftOffset + (192 * scale),
+                  top: topOffset + (110 * scale),
+                  width: 96 * scale,
+                  height: 40 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _tabController.animateTo(2);
+                      setState(() {});
+                    },
+                  ),
+                ),
+                // Tab D (index 3)
+                Positioned(
+                  left: leftOffset + (288 * scale),
+                  top: topOffset + (110 * scale),
+                  width: 96 * scale,
+                  height: 40 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _tabController.animateTo(3);
+                      setState(() {});
+                    },
+                  ),
+                ),
+                // Tab E (index 4)
+                Positioned(
+                  left: leftOffset + (384 * scale),
+                  top: topOffset + (110 * scale),
+                  width: 96 * scale,
+                  height: 40 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _tabController.animateTo(4);
+                      setState(() {});
+                    },
+                  ),
+                ),
+                // Tab F (index 5)
+                Positioned(
+                  left: leftOffset + (480 * scale),
+                  top: topOffset + (110 * scale),
+                  width: 96 * scale,
+                  height: 40 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      _tabController.animateTo(5);
+                      setState(() {});
+                    },
+                  ),
+                ),
+
+                // B. Match 1 Card Hotspot (Loads active group matches[0])
+                if (match1 != null) ...[
+                  Positioned(
+                    left: leftOffset + (20 * scale),
+                    top: topOffset + (636 * scale),
+                    width: 536 * scale,
+                    height: 98 * scale,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => _showMatchDetail(context, match1, provider),
                     ),
                   ),
-                  const SizedBox(height: 24),
-
-                  // Header for group matches
-                  const Text(
-                    'Partidos del Grupo',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
+                  // Match 1: Favorite Toggle Hotspot
+                  Positioned(
+                    left: leftOffset + (472 * scale),
+                    top: topOffset + (656 * scale),
+                    width: 48 * scale,
+                    height: 48 * scale,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => provider.toggleFavorite(match1.id),
                     ),
                   ),
-                  const SizedBox(height: 12),
-
-                  // Group Matches List
-                  if (groupMatches.isEmpty)
-                    const Center(
-                      child: Text(
-                        'No hay partidos programados para este grupo.',
-                        style: TextStyle(color: BentoColors.bentoSlate500, fontSize: 12),
-                      ),
-                    )
-                  else
-                    Column(
-                      children: groupMatches.map((match) {
-                        return MatchCardInline(
-                          match: match,
-                          onTap: () => _showMatchDetail(context, match, provider),
-                          onToggleFavorite: () => provider.toggleFavorite(match.id),
-                        );
-                      }).toList(),
-                    ),
                 ],
-              );
-            }).toList(),
-          ),
+
+                // C. Match 2 Card Hotspot (Loads active group matches[1])
+                if (match2 != null) ...[
+                  Positioned(
+                    left: leftOffset + (20 * scale),
+                    top: topOffset + (744 * scale),
+                    width: 536 * scale,
+                    height: 98 * scale,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => _showMatchDetail(context, match2, provider),
+                    ),
+                  ),
+                  // Match 2: Favorite Toggle Hotspot
+                  Positioned(
+                    left: leftOffset + (472 * scale),
+                    top: topOffset + (764 * scale),
+                    width: 48 * scale,
+                    height: 48 * scale,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => provider.toggleFavorite(match2.id),
+                    ),
+                  ),
+                ],
+
+                // D. Bottom Navigation Bar Hotspots (split into 7 equal clickable sections)
+                
+                // Tab 0: Inicio
+                Positioned(
+                  left: leftOffset + (0 * scale),
+                  top: topOffset + (906 * scale),
+                  width: 82.2 * scale,
+                  height: 118 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => widget.onNavigate(0),
+                  ),
+                ),
+
+                // Tab 1: Fixture
+                Positioned(
+                  left: leftOffset + (82.2 * scale),
+                  top: topOffset + (906 * scale),
+                  width: 82.2 * scale,
+                  height: 118 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => widget.onNavigate(1),
+                  ),
+                ),
+
+                // Tab 2: Grupos
+                Positioned(
+                  left: leftOffset + (164.4 * scale),
+                  top: topOffset + (906 * scale),
+                  width: 82.2 * scale,
+                  height: 118 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => widget.onNavigate(2),
+                  ),
+                ),
+
+                // Tab 3: Países
+                Positioned(
+                  left: leftOffset + (246.6 * scale),
+                  top: topOffset + (906 * scale),
+                  width: 82.2 * scale,
+                  height: 118 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => widget.onNavigate(3),
+                  ),
+                ),
+
+                // Tab 4: Estadios
+                Positioned(
+                  left: leftOffset + (328.8 * scale),
+                  top: topOffset + (906 * scale),
+                  width: 82.2 * scale,
+                  height: 118 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => widget.onNavigate(4),
+                  ),
+                ),
+
+                // Tab 5: Favoritos
+                Positioned(
+                  left: leftOffset + (411.0 * scale),
+                  top: topOffset + (906 * scale),
+                  width: 82.2 * scale,
+                  height: 118 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => widget.onNavigate(5),
+                  ),
+                ),
+
+                // Tab 6: Ajustes
+                Positioned(
+                  left: leftOffset + (493.2 * scale),
+                  top: topOffset + (906 * scale),
+                  width: 82.8 * scale,
+                  height: 118 * scale,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => widget.onNavigate(6),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
-      ],
+      ),
     );
   }
 
@@ -215,60 +345,6 @@ class _GroupsScreenState extends State<GroupsScreen> with SingleTickerProviderSt
           },
         );
       },
-    );
-  }
-}
-
-class _TableCellHeader extends StatelessWidget {
-  final String text;
-  final bool alignLeft;
-
-  const _TableCellHeader({
-    Key? key,
-    required this.text,
-    this.alignLeft = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-      child: Text(
-        text,
-        textAlign: alignLeft ? TextAlign.left : TextAlign.center,
-        style: const TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w900,
-          color: BentoColors.bentoSlate500,
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
-  }
-}
-
-class _TableCellBody extends StatelessWidget {
-  final String text;
-  final bool isBold;
-  final Color? textColor;
-
-  const _TableCellBody({
-    Key? key,
-    required this.text,
-    this.isBold = false,
-    this.textColor,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 11,
-        fontWeight: isBold ? FontWeight.w900 : FontWeight.w600,
-        color: textColor ?? Theme.of(context).colorScheme.onSurface,
-      ),
     );
   }
 }
