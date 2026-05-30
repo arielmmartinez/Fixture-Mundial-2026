@@ -261,22 +261,37 @@ class MatchCard extends StatelessWidget {
 
   Widget _buildCircularFlag(String flag) {
     return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.white,
+      width: 38,
+      height: 38,
+      padding: const EdgeInsets.all(1.5), // Gold border ring thickness
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: BentoColors.bentoBorderLight, width: 1.5),
-        boxShadow: const [
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFFFFE07D), // Gold highlight
+            Color(0xFFB08C23), // Deep gold shadow
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
+            color: Colors.black26,
+            blurRadius: 5,
+            offset: Offset(0, 3),
           ),
         ],
       ),
-      child: Text(
-        flag,
-        style: const TextStyle(fontSize: 18),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          flag,
+          style: const TextStyle(fontSize: 18),
+        ),
       ),
     );
   }
@@ -320,6 +335,8 @@ class MatchCardInline extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  _buildCircularFlag(match.homeFlag),
+                  const SizedBox(width: 8),
                   Text(
                     match.homeTeam,
                     style: const TextStyle(
@@ -329,40 +346,61 @@ class MatchCardInline extends StatelessWidget {
                       color: BentoColors.deepSlate,
                     ),
                   ),
-                  const SizedBox(width: 6),
-                  _buildCircularFlag(match.homeFlag),
                 ],
               ),
             ),
             Container(
               alignment: Alignment.center,
-              width: 80,
-              child: match.status == 'próximo'
-                  ? Text(
-                      match.localTime,
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w900,
-                        fontSize: 13,
-                        color: BentoColors.deepSlate,
-                      ),
-                    )
-                  : Text(
-                      '${match.homeScore} - ${match.awayScore}',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14,
-                        color: match.status == 'en vivo' ? Colors.red : BentoColors.deepSlate,
-                      ),
+              width: 100, // Slightly wider to hold the vertical lines nicely
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '|',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      color: BentoColors.bentoBorderLight.withOpacity(0.4),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
                     ),
+                  ),
+                  const SizedBox(width: 8),
+                  match.status == 'próximo'
+                      ? Text(
+                          match.localTime,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w900,
+                            fontSize: 13,
+                            color: BentoColors.deepSlate,
+                          ),
+                        )
+                      : Text(
+                          '${match.homeScore} - ${match.awayScore}',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w900,
+                            fontSize: 13,
+                            color: match.status == 'en vivo' ? Colors.red : BentoColors.deepSlate,
+                          ),
+                        ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '|',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      color: BentoColors.bentoBorderLight.withOpacity(0.4),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  _buildCircularFlag(match.awayFlag),
-                  const SizedBox(width: 6),
                   Text(
                     match.awayTeam,
                     style: const TextStyle(
@@ -372,6 +410,8 @@ class MatchCardInline extends StatelessWidget {
                       color: BentoColors.deepSlate,
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  _buildCircularFlag(match.awayFlag),
                 ],
               ),
             ),
@@ -407,15 +447,37 @@ class MatchCardInline extends StatelessWidget {
 
   Widget _buildCircularFlag(String flag) {
     return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: Colors.white,
+      width: 30,
+      height: 30,
+      padding: const EdgeInsets.all(1.5), // Gold border ring thickness
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: BentoColors.bentoBorderLight, width: 1.2),
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFFFFE07D), // Gold highlight
+            Color(0xFFB08C23), // Deep gold shadow
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 3,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
-      child: Text(
-        flag,
-        style: const TextStyle(fontSize: 14),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          flag,
+          style: const TextStyle(fontSize: 14),
+        ),
       ),
     );
   }

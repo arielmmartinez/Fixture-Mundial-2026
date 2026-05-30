@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: BentoTheme.lightTheme,
       darkTheme: BentoTheme.darkTheme,
-      themeMode: ThemeMode.system, // Enforce dark/light mode following OS settings
+      themeMode: ThemeMode.dark, // Enforce the dark premium sports theme globally
       home: const MainNavigationFrame(),
     );
   }
@@ -110,8 +110,10 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
               index: _currentIndex,
               children: screens,
             ),
-      bottomNavigationBar: Container(
-        height: 74,
+      bottomNavigationBar: _currentIndex == 0
+          ? null // Hide dynamic nav bar on HomeScreen to show the mockup's pixel-perfect baked nav bar
+          : Container(
+              height: 88,
         decoration: BoxDecoration(
           color: BentoColors.pitchDark,
           border: const Border(
@@ -163,19 +165,28 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                padding: const EdgeInsets.all(7), // Circular padding
                 decoration: BoxDecoration(
-                  color: isSelected ? BentoColors.soccerGreen.withOpacity(0.12) : Colors.transparent,
-                  borderRadius: BorderRadius.circular(16),
+                  shape: BoxShape.circle,
+                  gradient: isSelected
+                      ? const LinearGradient(
+                          colors: [
+                            Color(0xFF0C2D57), // Metallic blue midnight
+                            Color(0xFF008DDA), // Glowing blue
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                      : null,
                   border: Border.all(
-                    color: isSelected ? BentoColors.soccerGreen : Colors.transparent,
+                    color: isSelected ? const Color(0xFF00E5FF) : Colors.transparent, // Glowing Turquoise border
                     width: 1.5,
                   ),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: BentoColors.soccerGreen.withOpacity(0.3),
-                            blurRadius: 8,
+                            color: const Color(0xFF00E5FF).withOpacity(0.4),
+                            blurRadius: 10,
                             spreadRadius: 1,
                           )
                         ]
@@ -183,11 +194,11 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
                 ),
                 child: Icon(
                   isSelected ? selectedIcon : unselectedIcon,
-                  color: isSelected ? BentoColors.soccerGreen : BentoColors.bentoSlate500,
-                  size: 17,
+                  color: isSelected ? Colors.white : BentoColors.bentoSlate500,
+                  size: 16,
                 ),
               ),
-              const SizedBox(height: 1),
+              const SizedBox(height: 2),
               Text(
                 label,
                 maxLines: 1,
@@ -196,7 +207,7 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
                   fontFamily: 'Inter',
                   fontSize: 7.5,
                   fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
-                  color: isSelected ? BentoColors.soccerGreen : BentoColors.bentoSlate500,
+                  color: isSelected ? const Color(0xFF00E5FF) : BentoColors.bentoSlate500,
                 ),
               ),
             ],
@@ -205,4 +216,4 @@ class _MainNavigationFrameState extends State<MainNavigationFrame> {
       ),
     );
   }
-  }
+}

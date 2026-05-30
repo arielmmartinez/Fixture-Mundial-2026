@@ -43,67 +43,8 @@ class PremiumHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            // Title: "Mundial 2026"
-            const Text(
-              'Mundial 2026',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 34,
-                fontWeight: FontWeight.w900,
-                fontStyle: FontStyle.italic,
-                color: Colors.white,
-                letterSpacing: -1,
-                shadows: [
-                  Shadow(
-                    color: Colors.black54,
-                    offset: Offset(0, 4),
-                    blurRadius: 12,
-                  ),
-                  Shadow(
-                    color: BentoColors.worldCupGold,
-                    offset: Offset(0, 0),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 6),
-
-            // Badge: "FASE DE GRUPOS"
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF047857), // Deep emerald
-                    BentoColors.soccerGreen, // Neon Turquesa
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: BentoColors.electricGreen.withOpacity(0.8),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: BentoColors.electricGreen.withOpacity(0.4),
-                    blurRadius: 10,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: Text(
-                subtitle.toUpperCase(),
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 9,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  letterSpacing: 1.2,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
+            // Space occupied by the baked-in header elements
+            const SizedBox(height: 108),
           ],
         ),
       ),
